@@ -16,3 +16,7 @@ class Fermata:
 
     def __eq__(self, other):
         return self.id_fermata == other.id_fermata
+
+
+# ogni fermata è un nodo
+# arco esiste se c'è connessione tra fermate
