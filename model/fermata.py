@@ -18,5 +18,5 @@ class Fermata:
         return self.id_fermata == other.id_fermata
 
 
-# ogni fermata è un nodo
+# ogni fermata è un nodo (ogni nodo è una dataclass)
 # arco esiste se c'è connessione tra fermate
