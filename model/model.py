@@ -18,6 +18,16 @@ class Model:
         self._grafo.add_nodes_from(self._fermate) # ogni nodo corrisponde a una fermata
         # metto come valore una lista di oggetti
         self.addEdges2()
+        # numero archi viene diverso: 1428 vs 1476 (previste)
+        # questo perchè posso avere fermate collegate tra di loro con più linee
+        # alcuni archi sono ripetuti
+        # quindi inizializzo un MultiGraph o un grafo pesato
+
+    def buildGraphPesato(self):
+        # rimane anche un diGraph
+        self._grafo.clear()
+        self._grafo.add_nodes_from(self._fermate)  # uguale a prima
+        self.addEdgesPesati()
 
     # def addEdges(self): # molto molto lento (perchè faccio doppio ciclo, aggiungo un arco alla volta) -> impiega 109s
         # posso quando il grafo è piccolo
@@ -36,6 +46,7 @@ class Model:
                 v = self.idMapFermate[connessione.id_stazA]
                 self._grafo.add_edge(u, v)
 
+
     def addEdges2(self): # faccio una sola query semplice -> impiega meno di 1s
         allEdges = DAO.getAllEdges()
         for connessione in allEdges:
@@ -43,6 +54,35 @@ class Model:
             v = self.idMapFermate[connessione.id_stazA]
             self._grafo.add_edge(u, v)
 
+    def addEdgesPesati(self):
+        # riutilizzo principio funzionamento metodo addEdges2
+        # ma conto quante volto provo ad aggiungere arco
+        self._grafo.clear_edges()
+        allEdges = DAO.getAllEdges()
+        for connessione in allEdges:
+            u = self.idMapFermate[connessione.id_stazP]
+            v = self.idMapFermate[connessione.id_stazA]
+
+            if self._grafo.has_edge(u, v): # grafo come un dizionario
+                self._grafo[u][v]['weight'] += 1 # incremento peso
+            else: # se arco ancora non esiste
+                self._grafo.add_edge(u, v, weight = 1)
+
+    # in alternativa delego al DAO
+    # dipende da quanto è difficile scrivere query SQL (qua facile)
+    def addEdgesPesati2(self):
+        # delega calcolo del peso alla query sql
+        # semplifico codice python
+        self._grafo.clear_edges()
+        allEdgesPesati = DAO.getAllEdgesPesati()
+        # tupla (id_stazP, id_stazA, peso)
+
+        for e in allEdgesPesati:
+            u = self.idMapFermate[e[0]]
+            v = self.idMapFermate[e[1]]
+            peso = e[2]
+
+            self._grafo.add_edge(u, v, weight = peso)
 
     # 4 metodi uguali per esplorare il grafico (cambia come viene restituito il grafico)
     def getBFSNodesFromEdges(self, source):
@@ -73,6 +113,16 @@ class Model:
         nodi = list(tree.nodes)  # contiene anche source
         return nodi
 
+    def getArchiPesoMaggiore(self):
+        edges = self._grafo.edges(data = True)
+        # mettendo data = True, inserisco anche gli attributi associati (il peso)
+
+        edgesMaggiori = []
+        for e in edges:
+            if self._grafo.get_edge_data(e[0], e[1])["weight"] > 1: # metodo che mi restituisce i pesi
+                # analogo a fare: self._grafo[e[0]][e[1]]["weight"]
+                edgesMaggiori.append(e)
+        return edgesMaggiori
 
 
 

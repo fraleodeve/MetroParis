@@ -78,6 +78,27 @@ class DAO():
         conn.close()
         return result
 
+    @staticmethod
+    def getAllEdgesPesati():
+        conn = DBConnect.get_connection()
+
+        result = []
+
+        cursor = conn.cursor(dictionary=True)
+        query = """select id_stazP , id_stazA , count(*) as peso
+                from connessione c 
+                group by id_stazP, id_stazA 
+                order by peso desc"""
+        cursor.execute(query)
+
+        for row in cursor:
+            result.append((row["id_stazP"], row["id_stazA"], row["peso"]))
+            # raccolgo valori come una tupla (in questo caso non posso usare **row)
+
+        cursor.close()
+        conn.close()
+        return result
+
 
 
 
