@@ -17,6 +17,9 @@ class Controller:
         self._view.lst_result.controls.append(ft.Text("Grafo correttamente creato"))
         self._view.lst_result.controls.append(ft.Text(f"Il grafo è costituito da {self._model.get_numNodi()} nodi."))
         self._view.lst_result.controls.append(ft.Text(f"Il grafo è costituito da {self._model.get_numArchi()} archi."))
+        self._view._ddStazArrivo.disabled = False
+        self._view._ddStazPartenza.disabled = False
+        self._view._btnCalcola.disabled = False
         self._view.update_page()
 
 
@@ -31,8 +34,10 @@ class Controller:
         nodes = self._model.getBFSNodesFromEdges(self._fermataPartenza)
         self._view.lst_result.controls.clear()
         self._view.lst_result.controls.append(ft.Text(f"Di seguito i nodi raggiungibili da {self._fermataPartenza}:"))
-        for n in nodes:
-            self._view.lst_result.controls.append(ft.Text(f"{n}"))
+        # for n in nodes:
+            #self._view.lst_result.controls.append(ft.Text(f"{n}"))
+        for i in range (len(nodes)):
+            self._view.lst_result.controls.append(ft.Text(f"{i+1}. {nodes[i]}"))
         self._view.update_page()
 
 

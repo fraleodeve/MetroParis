@@ -21,6 +21,7 @@ class View(ft.UserControl):
         self._ddStazArrivo = None
         self._ddStazPartenza = None
         self._btnCrea = None
+        self._btnCalcola = None
 
     def load_interface(self):
         # title
@@ -38,9 +39,10 @@ class View(ft.UserControl):
 
         # Row with controls
         self._btnCrea = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handleCreaGrafo)
-        self._ddStazPartenza = ft.Dropdown(label="Stazione di Partenza")
-        self._ddStazArrivo = ft.Dropdown(label="Stazione di Arrivo")
-        self._btnCalcola = ft.ElevatedButton(text="Calcola Raggiungibili", on_click=self._controller.handleCercaRaggiungibili)
+        self._ddStazPartenza = ft.Dropdown(label="Stazione di Partenza", disabled=True)
+        self._ddStazArrivo = ft.Dropdown(label="Stazione di Arrivo", disabled=True)
+        self._btnCalcola = ft.ElevatedButton(text="Calcola Raggiungibili", on_click=self._controller.handleCercaRaggiungibili,
+                                             disabled=True)
 
 
         #Load elements in DD
