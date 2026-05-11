@@ -1,5 +1,17 @@
+import geopy
+
 from database.DAO import DAO
 import networkx as nx
+import geopy.distance
+
+from model.fermata import Fermata
+
+
+def getPesoTempoPercorrenza(partenza: Fermata, arrivo: Fermata, velocita):
+    dist = geopy.distance.distance((partenza.coordX, partenza.coordY), (arrivo.coordX, arrivo.coordY)).km
+    time = dist/velocita * 60 # in minuti
+    return time
+
 
 class Model:
     def __init__(self):
@@ -27,7 +39,8 @@ class Model:
         # rimane anche un diGraph
         self._grafo.clear()
         self._grafo.add_nodes_from(self._fermate)  # uguale a prima
-        self.addEdgesPesati()
+        # self.addEdgesPesati()
+        self.addEdgesPesatiTempi()
 
     # def addEdges(self): # molto molto lento (perchè faccio doppio ciclo, aggiungo un arco alla volta) -> impiega 109s
         # posso quando il grafo è piccolo
@@ -124,6 +137,20 @@ class Model:
                 edgesMaggiori.append(e)
         return edgesMaggiori
 
+    def addEdgesPesatiTempi(self):
+        # creo archi in cui peso è pari al tempo di percorrenza di quell'arco ottenuto come rapporto tra distanza fra
+        # le stazioni e la velocità di percorrenza
+
+        self._grafo.clear_edges()
+        allEdgesVel = DAO.getAllEdgesVel()
+        for e in allEdgesVel:
+            u = self.idMapFermate[e[0]]
+            v = self.idMapFermate[e[1]]
+            peso = getPesoTempoPercorrenza(u, v, e[2])
+            self._grafo.add_edge(u, v, weight = peso)
+
+    def getShortestPath(self, partenza, arrivo):
+        return nx.single_source_dijkstra(self._grafo, partenza, arrivo)
 
 
     # per accedere a variabile privata

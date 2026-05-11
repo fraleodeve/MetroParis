@@ -9,10 +9,11 @@ class Controller:
         self._model = model
 
         self._fermataPartenza = None
+        self._fermataArrivo = None
 
     def handleCreaGrafo(self,e):
         # inizializzo grafo
-        self._model.buildGraph()
+        self._model.buildGraphPesato()
         self._view.lst_result.controls.clear()
         self._view.lst_result.controls.append(ft.Text("Grafo correttamente creato"))
         self._view.lst_result.controls.append(ft.Text(f"Il grafo è costituito da {self._model.get_numNodi()} nodi."))
@@ -20,6 +21,7 @@ class Controller:
         self._view._ddStazArrivo.disabled = False
         self._view._ddStazPartenza.disabled = False
         self._view._btnCalcola.disabled = False
+        self._view._btnTrovaPercorso.disabled = False
         self._view.update_page()
 
 
@@ -39,6 +41,41 @@ class Controller:
         for i in range (len(nodes)):
             self._view.lst_result.controls.append(ft.Text(f"{i+1}. {nodes[i]}"))
         self._view.update_page()
+
+    def handleTrovaPercorso(self, e):
+        if self._fermataPartenza is None or self._fermataArrivo is None:
+            self._view.lst_result.controls.clear()
+            self._view.lst_result.controls.append(ft.Text("Attenzione! Necessario selezionare fermate di partenza e arrivo",
+                                                          color = "red"))
+            self._view.update_page()
+            return
+
+        totTime, optPath = self._model.getShortestPath(self._fermataPartenza, self._fermataArrivo)
+        tempo = round(totTime, 2)
+
+        if optPath == []: # non ha trovato il percorso
+            self._view.lst_result.controls.clear()
+            self._view.lst_result.controls.append(ft.Text(f"Non ho trovato un cammino tra {self._fermataPartenza} e {self._fermataArrivo},"))
+            self._view.update_page()
+            return
+
+        self._view.lst_result.controls.clear()
+        self._view.lst_result.controls.append(
+            ft.Text(f"Ho trovato un cammino tra {self._fermataPartenza} e {self._fermataArrivo}."
+                    f" Impiega {tempo} minuti", color = "green"))
+
+        self._view.lst_result.controls.append(
+            ft.Text(f"Di seguito la lista delle fermate: "))
+
+        for v in optPath:
+            self._view.lst_result.controls.append(ft.Text(v))
+        self._view.update_page()
+
+
+
+
+
+
 
 
 
