@@ -7,7 +7,6 @@ class Fermata:
     coordX: int
     coordY: int
 
-
     def __hash__(self):
         return self.id_fermata
 
@@ -16,7 +15,6 @@ class Fermata:
 
     def __eq__(self, other):
         return self.id_fermata == other.id_fermata
-
 
 # ogni fermata è un nodo (ogni nodo è una dataclass)
 # arco esiste se c'è connessione tra fermate

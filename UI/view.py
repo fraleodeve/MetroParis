@@ -32,8 +32,7 @@ class View(ft.UserControl):
         img_path = os.path.join(os.getcwd(), 'database/RATP.png')
         self._logo = ft.Image(src=img_path,
                               width=100,
-                              height=100,
-                              )
+                              height=100,)
 
         row1 = ft.Row([self._title, self._logo],
                       alignment=ft.MainAxisAlignment.CENTER)
@@ -48,11 +47,9 @@ class View(ft.UserControl):
                                              on_click=self._controller.handleTrovaPercorso,
                                              disabled=True)
 
-
         #Load elements in DD
         self._controller.loadFermate(self._ddStazPartenza)
         self._controller.loadFermate(self._ddStazArrivo)
-
 
         row2 = ft.Row([self._btnCrea,
                        self._ddStazPartenza,
@@ -63,9 +60,7 @@ class View(ft.UserControl):
 
         # Row with listview
         self.lst_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
-
         self._page.add(row1, row2, self.lst_result)
-
         self._page.update()
 
     def set_controller(self, controller):

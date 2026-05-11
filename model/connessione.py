@@ -7,7 +7,6 @@ class Connessione: # copio da database
     id_stazP: int
     id_stazA: int
 
-
     def __hash__(self):
         return hash(self.id_connessione)
 

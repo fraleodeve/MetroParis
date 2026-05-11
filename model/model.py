@@ -1,17 +1,14 @@
-import geopy
-
-from database.DAO import DAO
-import networkx as nx
-import geopy.distance
-
 from model.fermata import Fermata
+from database.DAO import DAO
 
+import geopy
+import geopy.distance
+import networkx as nx
 
 def getPesoTempoPercorrenza(partenza: Fermata, arrivo: Fermata, velocita):
     dist = geopy.distance.distance((partenza.coordX, partenza.coordY), (arrivo.coordX, arrivo.coordY)).km
     time = dist/velocita * 60 # in minuti
     return time
-
 
 class Model:
     def __init__(self):
@@ -59,7 +56,6 @@ class Model:
                 v = self.idMapFermate[connessione.id_stazA]
                 self._grafo.add_edge(u, v)
 
-
     def addEdges2(self): # faccio una sola query semplice -> impiega meno di 1s
         allEdges = DAO.getAllEdges()
         for connessione in allEdges:
@@ -94,7 +90,6 @@ class Model:
             u = self.idMapFermate[e[0]]
             v = self.idMapFermate[e[1]]
             peso = e[2]
-
             self._grafo.add_edge(u, v, weight = peso)
 
     # 4 metodi uguali per esplorare il grafico (cambia come viene restituito il grafico)
@@ -151,7 +146,6 @@ class Model:
 
     def getShortestPath(self, partenza, arrivo):
         return nx.single_source_dijkstra(self._grafo, partenza, arrivo)
-
 
     # per accedere a variabile privata
     def get_numNodi(self):

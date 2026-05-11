@@ -2,7 +2,6 @@ from database.DB_connect import DBConnect
 from model.connessione import Connessione
 from model.fermata import Fermata
 
-
 class DAO():
 
     @staticmethod
@@ -17,6 +16,7 @@ class DAO():
 
         for row in cursor:
             result.append(Fermata(**row))
+
         cursor.close()
         conn.close()
         return result
@@ -38,6 +38,7 @@ class DAO():
 
         for row in cursor:
             result.append(row)
+
         cursor.close()
         conn.close()
         return len(result) > 0
@@ -58,6 +59,7 @@ class DAO():
 
         for row in cursor:
             result.append(Connessione(**row))
+
         cursor.close()
         conn.close()
         return result
@@ -74,6 +76,7 @@ class DAO():
 
         for row in cursor:
             result.append(Connessione(**row))
+
         cursor.close()
         conn.close()
         return result
