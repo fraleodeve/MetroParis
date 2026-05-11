@@ -68,7 +68,7 @@ class Controller:
             ft.Text(f"Di seguito la lista delle fermate: "))
 
         for v in optPath:
-            self._view.lst_result.controls.append(ft.Text(v))
+            self._view.lst_result.controls.append(ft.Text(f"- {v}"))
         self._view.update_page()
 
 
