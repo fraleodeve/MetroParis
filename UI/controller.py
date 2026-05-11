@@ -1,6 +1,5 @@
 import flet as ft
 
-
 class Controller:
     def __init__(self, view, model):
         # the view, with the graphical elements of the UI
@@ -24,7 +23,6 @@ class Controller:
         self._view._btnTrovaPercorso.disabled = False
         self._view.update_page()
 
-
     def handleCercaRaggiungibili(self,e):
         if self._fermataPartenza is None:
             self._view.lst_result.controls.clear()
@@ -37,7 +35,7 @@ class Controller:
         self._view.lst_result.controls.clear()
         self._view.lst_result.controls.append(ft.Text(f"Di seguito i nodi raggiungibili da {self._fermataPartenza}:"))
         # for n in nodes:
-            #self._view.lst_result.controls.append(ft.Text(f"{n}"))
+            # self._view.lst_result.controls.append(ft.Text(f"{n}"))
         for i in range (len(nodes)):
             self._view.lst_result.controls.append(ft.Text(f"{i+1}. {nodes[i]}"))
         self._view.update_page()
@@ -70,14 +68,6 @@ class Controller:
         for v in optPath:
             self._view.lst_result.controls.append(ft.Text(f"- {v}"))
         self._view.update_page()
-
-
-
-
-
-
-
-
 
     def loadFermate(self, dd: ft.Dropdown()):
         fermate = self._model.fermate
